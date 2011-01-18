@@ -1,0 +1,17 @@
+
+http://rigidus.ru
+
+version: 2011.01.14 02:51
+
+My home page written on Common Lisp
+
+Require:
+✔ restas
+✔ closure-template
+✔ split-sequence
+✔ cl-ppcre
+✔ anaphora
+
+Contacts:
+  email:  i.am.rigidus@gmail.com
+  jabber: rigidus@jabber.ru
