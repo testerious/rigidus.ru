@@ -8,25 +8,25 @@
 <ul>
   <li>
     <span style="color: green">★</span>
-    <a href="/sicp.pdf">
+    <a href="sicp.pdf">
       Структура и интерпретация компьютерных программ. Абельсон, Сассман (перевод: Ю. Бронников)
     </a>
   </li>
   <li>
     <span style="color: green">★</span>
-    <a href="/lisp1.pdf">
+    <a href="lisp1.pdf">
 	  Мир Лиспа. Том 1. Э.Хювенен, И.Сеппянен
     </a>
   </li>
   <li>
     <span style="color: green">★</span>
-    <a href="/lisp2.pdf">
+    <a href="lisp2.pdf">
 	  Мир Лиспа. Том 2. Э.Хювенен, И.Сеппянен
     </a>
   </li>
   <li>
     <span style="color: green">★</span>
-    <a href="/lisp_intro.pdf">
+    <a href="lisp_intro.pdf">
 	  Введение в программирование на языке Лисп. Лидия Городняя
     </a>
   </li>
@@ -37,13 +37,13 @@
 <ul>
   <li>
     <span style="color: green">★</span>
-    <a href="/emacs-man.pdf">
+    <a href="emacs-man.pdf">
       Руководство по GNU Emacs
     </a>
   </li>
   <li>
     <span style="color: green">★</span>
-    <a href="/emacs-lisp-man.pdf">
+    <a href="emacs-lisp-man.pdf">
       Программирование на Emacs Lisp
     </a>
   </li>
@@ -54,7 +54,7 @@
 <ul>
   <li>
     <span style="color: green">★</span>
-    <a href="/tapl.pdf">
+    <a href="tapl.pdf">
       Типы в языках программирования
     </a>
   </li>
