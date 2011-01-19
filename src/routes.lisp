@@ -17,10 +17,31 @@
           (tpl:main (list :title line)))))
 
 (restas:define-route about ("about")
-  (path "data/articles/about.org"))
+  (path "content/about.org"))
 
 (restas:define-route contacts ("contacts")
-  (path "data/articles/contacts.org"))
+  (path "content/contacts.org"))
+
+(restas:define-route articles ("articles/")
+  (let ((data (parse-org (path "content/articles/articles.org"))))
+    (setf (orgdata-content data)
+          (ppcre:regex-replace-all
+                     "@make-list-by-category(.*)@"
+                     (orgdata-content data)
+                     (list #'(lambda (match reg)
+                               (declare (ignore match))
+                               (let* ((instr (string-trim '(#\Space #\Tab #\Newline) reg)))
+                                 (multiple-value-bind (star color category)
+                                     (values-list (split-sequence:split-sequence #\Space instr))
+                                   (format nil 
+                                           "<ul>~{~a~}</ul>"
+                                           (iter (for x in (find-articles-by-category category))
+                                                 (collect (tpl:li (append x (list :star star :color color))))))))))
+                     :simple-calls t))
+    data))
+
+(restas:define-route article ("articles/:article")
+  (path (format nil "content/articles/~A.org" article)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; submodules
@@ -31,6 +52,6 @@
 
 (restas:mount-submodule -resources- (#:restas.directory-publisher)
   (restas.directory-publisher:*baseurl* '("resources"))
-  (restas.directory-publisher:*directory* (path "data/resources/"))
+  (restas.directory-publisher:*directory* (path "content/resources/"))
   (restas.directory-publisher:*default-render-method* *default-render-method*)
   (restas.directory-publisher:*directory-index-files* '("resources.org")))

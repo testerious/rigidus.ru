@@ -7,12 +7,16 @@
 
 (in-package #:rigidus)
 
+(defclass orgdata ()
+  ((content :accessor orgdata-content)
+   (sections :accessor orgdata-sections)
+   (directives :accessor orgdata-directives)))
 
 (defun menu ()
   (list (list :link "/" :title "Главная")
         (list :link "/about" :title "About")
         (list :link "/articles/" :title "Статьи")
-        (list :link "/resources" :title "Ресурсы")
+        (list :link "/resources/" :title "Ресурсы")
         (list :link "/contacts" :title "Контакты")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -32,7 +36,7 @@
 
 (defmethod restas:render-object ((designer rigidus-render) (file pathname))
   (if (string= (pathname-type file) "org")
-      (restas:render-object designer (org-to-html file))
+      (restas:render-object designer (parse-org file))
       (call-next-method)))
 
 
@@ -62,18 +66,13 @@
 ;;; org support
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass orgdata ()
-  ((content :accessor orgdata-content)
-   (sections :accessor orgdata-sections)
-   (directives :accessor orgdata-directives)))
-
-(defgeneric org-to-html (src)
+(defgeneric parse-org (src)
   (:documentation "Transform org markup into HTML"))
 
-(defmethod org-to-html ((file pathname))
-  (org-to-html (alexandria:read-file-into-string file)))
+(defmethod parse-org ((file pathname))
+  (parse-org (alexandria:read-file-into-string file)))
 
-(defmethod org-to-html ((org-content string))
+(defmethod parse-org ((org-content string))
   ;; Разбиваем входный текст по строкам
   (let ((strings (split-sequence:split-sequence #\NewLine org-content))
         (sections)    ;; Информация о заголовках секций
@@ -195,10 +194,12 @@
 
 (defun find-articles-by-category (param)
   "Возвращает все статьи, у которых @category соотвествует параметру"
-  (iter (for filepath in (directory (path "data/articles/*.org")))
-        ;;(multiple-value-bind (content sections directives) (org-to-html filepath)
-        (let ((directives (orgdata-directives (org-to-html filepath))))
-          (when (string= param (getf directives :category))
-            (collect (list :title (getf directives :title)
-                           :link  (concatenate 'string "/articles/" (pathname-name filepath))
-                           :sort  (getf directives :sort)))))))
+  (sort (iter (for filepath in (directory (path "content/articles/*.org")))
+              (let ((directives (orgdata-directives (parse-org filepath))))
+                (when (string= param (getf directives :category))
+                  (collect (list :title (getf directives :title)
+                                 :link  (concatenate 'string "/articles/" (pathname-name filepath))
+                                 :sort  (getf directives :sort))))))
+        #'string<
+        :key #'(lambda (x) (getf x :title))))
+
