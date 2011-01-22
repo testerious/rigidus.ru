@@ -61,24 +61,24 @@ body {
 
 .col1 {
 	width: 225px;
-    .border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 .col2 {
 	width: 320px;
-    .border: 1px solid white;
+    /*.border: 1px solid white;*/
     padding: 10px;
 }
 
 .col3 {
 	width: 840px;
     padding-right: 20px;
-    .border: 1px solid green;
+    /*.border: 1px solid green;*/
 }
 
 .col4 {
 	width: 400px;
-    .border: 1px solid blue;
+    /*.border: 1px solid blue;*/
 }
 
 .padLeft {
@@ -185,7 +185,7 @@ a:focus {
 
 #logo:hover {
 	opacity: .8;
-	filter: alpha(opacity=80);
+    /*filter: alpha(opacity=80);*/
 }
 
 /* /////////////////////////////////
@@ -376,7 +376,7 @@ pre em, code em {
 #guideNav {
 	margin: 0px 13px 80px 30px;
 	padding: 8px 12px;
-	.background: #181818;
+    /*.background: #181818;*/
 }
 
 #guideNav h3 {
