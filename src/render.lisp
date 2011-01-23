@@ -66,6 +66,18 @@
 ;;; org support
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defmacro find-command (str body &optional (replace '(setf line "ℕ")))
+  `(when (equal 0 (search ,str line))
+     (let ((tail (handler-case (subseq line (+ 1 (length ,str)))
+                   (SB-KERNEL:BOUNDING-INDICES-BAD-ERROR () ,str))))
+       ,body
+       ,replace)))
+
+(defmacro find-directive (directive)
+  `(find-command ,directive (setf (getf directives (intern (string-upcase (subseq ,directive 1)) :keyword))
+                        (string-trim '(#\  #\tab #\Newline) tail))))
+
+
 (defgeneric parse-org (src)
   (:documentation "Transform org markup into HTML"))
 
@@ -92,21 +104,10 @@
                                   ;; Удаляем директиву -*-
                                   (when (search "-*-" line)
                                     (setf line "ℕ"))
-                                  ;; @title
-                                  (when (equal 0 (search "@title" line))
-                                    (setf (getf directives :title)
-                                          (string-trim '(#\  #\tab #\Newline) (subseq line 7)))
-                                    (setf line "ℕ"))
-                                  ;; @category
-                                  (when (equal 0 (search "@category" line))
-                                    (setf (getf directives :category)
-                                          (string-trim '(#\  #\tab #\Newline) (subseq line 10)))
-                                    (setf line "ℕ"))
-                                  ;; @sort
-                                  (when (equal 0 (search "@sort" line))
-                                    (setf (getf directives :sort)
-                                          (string-trim '(#\  #\tab #\Newline) (subseq line 6)))
-                                    (setf line "ℕ"))
+                                  ;; Директивы
+                                  (find-directive "@title")
+                                  (find-directive "@category")
+                                  (find-directive "@sort")
                                   ;; *
                                   (when (ppcre:scan "\\A\\*+\\s+" line)
                                     (setf line
@@ -120,28 +121,22 @@
                                               (format nil "<h~a><a name=\"anchor-~a\">~a</a></h~a>"
                                                       cnt (length sections) headline cnt)))))
                                   ;; @/code
-                                  (when (or (equal 0 (search "@/code" line))
-                                            (equal 0 (search "</source" line)))
-                                    (setf (getf mode :code) nil)
-                                    (setf line "</pre>"))
+                                  (find-command "@/code" (setf (getf mode :code) nil) (setf line "</pre>"))
+                                  (find-command "</source" (setf (getf mode :code) nil) (setf line "</pre>"))
                                   ;; @store
-                                  (when (equal 0 (search "@store" line))
-                                    (with-open-file (fstream (path (subseq line 7)) :direction :output :if-exists :supersede)
-                                      (format fstream "~{~a~%~}"
-                                              (loop :for i :in (reverse save)
-                                                 :unless (search "ℕ" i)
-                                                 :collect i)))
-                                    ;; (setf line "ℕ")
-                                    )
+                                  (find-command "@store"
+                                      (with-open-file (fstream (path tail) :direction :output :if-exists :supersede)
+                                        (format fstream "~{~a~%~}"
+                                                (loop :for i :in (reverse save)
+                                                   :unless (search "ℕ" i)
+                                                   :collect i))))
                                   ;; @append
-                                  (when (equal 0 (search "@append" line))
-                                    (with-open-file (fstream (path (subseq line 8)) :direction :output :if-exists :append)
-                                      (format fstream "~{~a~%~}"
-                                              (loop :for i :in (reverse save)
-                                                 :unless (search "ℕ" i)
-                                                 :collect i)))
-                                    ;; (setf line "ℕ")
-                                    )
+                                  (find-command "@append"
+                                      (with-open-file (fstream (path tail) :direction :output :if-exists :append)
+                                        (format fstream "~{~a~%~}"
+                                                (loop :for i :in (reverse save)
+                                                   :unless (search "ℕ" i)
+                                                   :collect i))))
                                   ;; mode:code
                                   (when (getf mode :code)
                                     (push line save)
@@ -181,10 +176,8 @@
                                         (setf save nil)
                                         (setf (getf mode :code) t))
                                       ;; else
-                                      ;; (format nil "~a~a" (length save) line)
-                                      line
-                                      ))))))
-     ;; заголовки секций (в обратном порядке)
+                                      line))))))
+    ;; заголовки секций (в обратном порядке)
     (setf (orgdata-sections result)
           (reverse sections))
      ;; директивы
@@ -202,4 +195,3 @@
                                  :sort  (getf directives :sort))))))
         #'string<
         :key #'(lambda (x) (getf x :title))))
-
