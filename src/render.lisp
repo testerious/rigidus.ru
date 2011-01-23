@@ -60,7 +60,7 @@
                      :content content))))))
 
 (defclass rigidus-wiki-render (restas.wiki:drawer) ())
-  
+
 (defmethod restas.wiki:finalize-page ((drawer rigidus-wiki-render) content)
   (tpl:root (list :headtitle (getf content :title)
                   :content (tpl:base (list :navpoints (menu)
