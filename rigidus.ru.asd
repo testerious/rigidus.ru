@@ -6,7 +6,7 @@
 ;;;; Author: Moskvitin Andrey <archimag@gmail.com>
 
 (defsystem rigidus.ru
-  :depends-on (#:restas-directory-publisher #:closure-template)
+  :depends-on (#:restas-directory-publisher #:restas-wiki #:closure-template)
   :components ((:module "src"
                         :components ((:file "defmodule")
                                      (:file "render" :depends-on ("defmodule"))

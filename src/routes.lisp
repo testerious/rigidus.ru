@@ -55,3 +55,10 @@
   (restas.directory-publisher:*directory* (path "content/resources/"))
   (restas.directory-publisher:*default-render-method* *default-render-method*)
   (restas.directory-publisher:*directory-index-files* '("resources.org")))
+
+(restas:mount-submodule -wiki- (#:restas.wiki)
+  (restas.wiki:*baseurl* '("wiki"))
+  (restas.wiki:*storage* (make-instance 'restas.wiki:file-storage
+                                        :dir #P"/var/rigidus.ru/wiki/"))
+  (restas.wiki:*default-render-method* (make-instance 'rigidus-wiki-render))
+  (restas.wiki:*wiki-user-function* #'(lambda () "anonymous")))
