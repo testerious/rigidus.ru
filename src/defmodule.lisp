@@ -5,10 +5,10 @@
 ;;;;
 ;;;; Author: Moskvitin Andrey <archimag@gmail.com>
 
-;; (require 'hunchentoot)
-;; (require 'routes)
 (require 'restas)
 (require 'closure-template)
+(require 'restas-directory-publisher)
+(require 'restas-wiki)
 
 (restas:define-module #:rigidus
   (:use #:cl #:iter))

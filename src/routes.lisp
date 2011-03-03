@@ -50,11 +50,16 @@
 ;; (restas:mount-submodule -static- (#:restas.directory-publisher)
 ;;   (restas.directory-publisher:*directory* (path "static/")))
 
-;; (restas:mount-submodule -resources- (#:restas.directory-publisher)
-;;   (restas.directory-publisher:*baseurl* '("resources"))
-;;   (restas.directory-publisher:*directory* (path "content/resources/"))
-;;   (restas.directory-publisher:*default-render-method* *default-render-method*)
-;;   (restas.directory-publisher:*directory-index-files* '("resources.org")))
+(restas:mount-submodule -static- (#:restas.directory-publisher restas:@nginx-accel-redirect)
+  (restas.directory-publisher:*directory* (path "static/")))
+
+(restas:mount-submodule -resources- (#:restas.directory-publisher)
+  (restas.directory-publisher:*baseurl* '("resources"))
+  (restas.directory-publisher:*directory* (path "content/resources/"))
+  (restas.directory-publisher:*default-render-method* *default-render-method*)
+  (restas.directory-publisher:*directory-index-files* '("resources.org")))
+
+
 
 ;; (restas:mount-submodule -wiki- (#:restas.wiki)
 ;;   (restas.wiki:*baseurl* '("wiki"))
@@ -67,6 +72,11 @@
 (defparameter *host* "localhost")
 (defparameter *port* 8092)
 
-(restas:start '#:wiki :hostname (format nil "wiki.~a" *host*) :port *port*)
+;; (restas:start '#:restas.wiki :hostname (format nil "wiki.~a" *host*) :port *port*)
 (restas:start '#:rigidus :hostname *host* :port *port*)
 (setf restas:*default-host-redirect* *host*)
+
+;; (restas:make-context (restas.directory-publisher:*baseurl* '("tmp"))
+;;                      (restas.directory-publisher:*directory* #P"/tmp/")
+;;                      (restas.directory-publisher:*autoindex* t)))
+;; http://restas.lisper.ru/ru/manual/modules.html#%D0%B4%D1%83%D0%B0%D0%BB%D0%B8%D0%B7%D0%BC
