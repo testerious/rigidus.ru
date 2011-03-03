@@ -5,6 +5,11 @@
 ;;;;
 ;;;; Author: Moskvitin Andrey <archimag@gmail.com>
 
+;; (require 'hunchentoot)
+;; (require 'routes)
+(require 'restas)
+(require 'closure-template)
+
 (restas:define-module #:rigidus
   (:use #:cl #:iter))
 
@@ -17,7 +22,4 @@
 (defun path (relative)
   (merge-pathnames relative *basedir*))
 
-(closure-template:compile-template :common-lisp-backend
-                                   (path "src/templates.soy"))
-                                            
-
+(closure-template:compile-template :common-lisp-backend (path "src/templates.soy"))

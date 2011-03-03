@@ -59,18 +59,18 @@
                                                     :title (cadr section))))
                      :content content))))))
 
-(defclass rigidus-wiki-render (restas.wiki:drawer) ())
+;; (defclass rigidus-wiki-render (restas.wiki:drawer) ())
 
-(defmethod restas.wiki:finalize-page ((drawer rigidus-wiki-render) content)
-  (tpl:root (list :headtitle (getf content :title)
-                  :content (tpl:base (list :navpoints (menu)
-                                           :content (concatenate 'string
-                                                                 (restas.wiki.view:show-page-menu (getf content :menu-links))
-                                                                 (getf content :content))
-                                           :stat (tpl:stat))))))
+;; (defmethod restas.wiki:finalize-page ((drawer rigidus-wiki-render) content)
+;;   (tpl:root (list :headtitle (getf content :title)
+;;                   :content (tpl:base (list :navpoints (menu)
+;;                                            :content (concatenate 'string
+;;                                                                  (restas.wiki.view:show-page-menu (getf content :menu-links))
+;;                                                                  (getf content :content))
+;;                                            :stat (tpl:stat))))))
 
-(defmethod restas.wiki:generate-content-from-markup ((drawer rigidus-wiki-render) data)
-  (orgdata-content (parse-org data)))
+;; (defmethod restas.wiki:generate-content-from-markup ((drawer rigidus-wiki-render) data)
+;;   (orgdata-content (parse-org data)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; org support
