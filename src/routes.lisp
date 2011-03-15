@@ -59,23 +59,30 @@
 (restas:define-route contacts ("contacts")
   (path "content/contacts.org"))
 
+(defparameter *cached-articles* nil)
+
 (restas:define-route articles ("articles/")
-  (let ((data (parse-org (path "content/articles/articles.org"))))
-    (setf (orgdata-content data)
-          (ppcre:regex-replace-all
-                     "@make-list-by-category(.*)@"
-                     (orgdata-content data)
-                     (list #'(lambda (match reg)
-                               (declare (ignore match))
-                               (let* ((instr (string-trim '(#\Space #\Tab #\Newline) reg)))
-                                 (multiple-value-bind (star color category)
-                                     (values-list (split-sequence:split-sequence #\Space instr))
-                                   (format nil
-                                           "<ul>~{~a~}</ul>"
-                                           (iter (for x in (find-articles-by-category category))
-                                                 (collect (tpl:li (append x (list :star star :color color))))))))))
-                     :simple-calls t))
-    data))
+  (if (null *cached-articles*)
+      (progn
+        (let ((data (parse-org (path "content/articles/articles.org"))))
+          (setf (orgdata-content data)
+                (ppcre:regex-replace-all
+                 "@make-list-by-category(.*)@"
+                 (orgdata-content data)
+                 (list #'(lambda (match reg)
+                           (declare (ignore match))
+                           (let* ((instr (string-trim '(#\Space #\Tab #\Newline) reg)))
+                             (multiple-value-bind (star color category)
+                                 (values-list (split-sequence:split-sequence #\Space instr))
+                               (format nil
+                                       "<ul>~{~a~}</ul>"
+                                       (iter (for x in (find-articles-by-category category))
+                                             (collect (tpl:li (append x (list :star star :color color))))))))))
+                 :simple-calls t))
+          (setf *cached-articles* data)))
+      ;; else
+      *cached-articles*))
+
 
 (restas:define-route article ("articles/:article")
   (path (format nil "content/articles/~A.org" article)))
@@ -113,12 +120,12 @@
 ;;   (restas.wiki:*wiki-user-function* #'(lambda () "anonymous")))
 
 
-(defparameter *host* "localhost")
-(defparameter *port* 8092)
+;; (defparameter *host* "localhost")
+;; (defparameter *port* 8092)
 
-;; (restas:start '#:restas.wiki :hostname (format nil "wiki.~a" *host*) :port *port*)
-(restas:start '#:rigidus :hostname *host* :port *port*)
-(setf restas:*default-host-redirect* *host*)
+;; ;; (restas:start '#:restas.wiki :hostname (format nil "wiki.~a" *host*) :port *port*)
+;; (restas:start '#:rigidus :hostname *host* :port *port*)
+;; (setf restas:*default-host-redirect* *host*)
 
 ;; (restas:make-context (restas.directory-publisher:*baseurl* '("tmp"))
 ;;                      (restas.directory-publisher:*directory* #P"/tmp/")

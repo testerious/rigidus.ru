@@ -15,15 +15,19 @@
 
 (in-package #:rigidus)
 
+(push #p"/root/rigidus.ru/" asdf:*central-registry*)
+
+
 (defparameter *basedir*
-  (make-pathname :directory
-                 (pathname-directory (asdf:component-pathname (asdf:find-system '#:rigidus.ru)))))
+  (make-pathname :directory "root/rigidus.ru"))
+  ;;                (pathname-directory (asdf:component-pathname (asdf:find-system '#:rigidus.ru)))))
 
 (defun path (relative)
   (merge-pathnames relative *basedir*))
 
 (closure-template:compile-template :common-lisp-backend (path "src/templates.soy"))
 
+(restas:start '#:rigidus :port 8080)
 ;; (restas:start '#:rigidus :port 4243)
 ;; (restas:debug-mode-on)
 ;; (setf hunchentoot:*catch-errors-p* t)
