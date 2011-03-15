@@ -23,3 +23,7 @@
   (merge-pathnames relative *basedir*))
 
 (closure-template:compile-template :common-lisp-backend (path "src/templates.soy"))
+
+;; (restas:start '#:rigidus :port 4243)
+;; (restas:debug-mode-on)
+;; (setf hunchentoot:*catch-errors-p* t)

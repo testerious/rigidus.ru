@@ -137,7 +137,7 @@
                 <strong>Кто все эти люди?</strong>
             </p>
             Пока это всего лишь я, Rigidus, собираю здесь все свои посты,
-            сделанный в  livejournal, так как им стало невозможно пользоваться
+            сделанные в  livejournal, так как им стало невозможно пользоваться
             из-за ошеломляющего количества спама.
 
             <p class="alert" style="width: 250px; color: red; font-size: 18px;">
@@ -163,6 +163,7 @@
             </form>
         </div>
         <div class="divider">.</div>
+        {$links |noAutoescape}
     </div>
 {/template}
 
@@ -179,7 +180,7 @@
         {$content |noAutoescape}
 
         <div class="divider">.</div>
-
+        {$links |noAutoescape}
         <ul id="share">
             {foreach $elt in $navpoints}
                 {call navelt data="$elt" /}

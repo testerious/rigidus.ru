@@ -7,6 +7,42 @@
 
 (in-package #:rigidus)
 
+(defun get-sape-links (uri)
+  (let ((rs "")
+        (extproc (sb-ext:run-program "/usr/bin/php" '("-q" "links.php")
+                                     :environment (append (sb-ext:posix-environ)
+                                                          (list (format nil "REQUEST_URI=~a" uri)))
+                                     :wait nil
+                                     :input nil
+                                     :output :stream)))
+    (unwind-protect
+         (with-open-stream (out (sb-ext:process-output extproc))
+           (setf rs (loop
+                       :for line := (read-line out nil nil)
+                       :while line
+                       :collect line))))
+    (when extproc (sb-ext:process-close extproc))
+    (format nil "~{~a~}" rs)))
+
+(defun get-sape-context (uri content)
+  (let* ((rs "")
+         (input-stream (make-string-input-stream content))
+         (extproc (sb-ext:run-program "/usr/bin/php" '("-q" "context.php")
+                               :environment (append (sb-ext:posix-environ)
+                                                    (list (format nil "REQUEST_URI=~a" uri)))
+                               :wait nil
+                               :input input-stream
+                               :output :stream)))
+      (unwind-protect
+           (with-open-stream (out (sb-ext:process-output extproc))
+             (setf rs (loop
+                         :for line := (read-line out nil nil)
+                         :while line
+                         :collect line))))
+      (when extproc (sb-ext:process-close extproc))
+      (format nil "~{~a~}" rs)))
+
+
 (restas:define-route main ("/")
   (let* ((lines (iter (for line in-file (path "afor.txt") using #'read-line)
                      (collect line)))
@@ -14,7 +50,8 @@
                     lines)))
     (list "Программирование - как искусство"
           (menu)
-          (tpl:main (list :title line)))))
+          (tpl:main (list :title line
+                          :links (get-sape-links "/"))))))
 
 (restas:define-route about ("about")
   (path "content/about.org"))
@@ -43,15 +80,22 @@
 (restas:define-route article ("articles/:article")
   (path (format nil "content/articles/~A.org" article)))
 
+;; (restas:define-route accel ("/static")
+;;   ;; (setf (hunchentoot:header-out :x-accel-redirect)
+;;   ;;       "/home/rigidus/rigidus.ru/static/style.css")
+;;   "---")
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; submodules
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (restas:mount-submodule -static- (#:restas.directory-publisher)
-;;   (restas.directory-publisher:*directory* (path "static/")))
-
-(restas:mount-submodule -static- (#:restas.directory-publisher restas:@nginx-accel-redirect)
+(restas:mount-submodule -static- (#:restas.directory-publisher)
   (restas.directory-publisher:*directory* (path "static/")))
+
+;; ;; новый вариант для http://wiki.nginx.org/XSendfile
+;; (restas:mount-submodule -static- (#:restas.directory-publisher restas:@nginx-accel-redirect)
+;;   (restas.directory-publisher:*directory* (path "static/")))
 
 (restas:mount-submodule -resources- (#:restas.directory-publisher)
   (restas.directory-publisher:*baseurl* '("resources"))
