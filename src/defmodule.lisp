@@ -9,17 +9,18 @@
 (require 'closure-template)
 (require 'restas-directory-publisher)
 (require 'restas-wiki)
+(require 'cl-base64)
 
 (restas:define-module #:rigidus
   (:use #:cl #:iter))
 
 (in-package #:rigidus)
 
-(push #p"/root/rigidus.ru/" asdf:*central-registry*)
+;; (push #p"/root/rigidus.ru/" asdf:*central-registry*)
 
 
 (defparameter *basedir*
-  (make-pathname :directory "root/rigidus.ru"))
+  (make-pathname :directory "media/CB64-E73A/rigidus.ru"))
   ;;                (pathname-directory (asdf:component-pathname (asdf:find-system '#:rigidus.ru)))))
 
 (defun path (relative)

@@ -7,11 +7,31 @@
 
 (in-package #:rigidus)
 
+(defun base64-cookies ()
+  (let* ((cookies   (hunchentoot:cookies-out*))
+         (serialize (mapcar #'(lambda (x)
+                                (let ((name (car x))
+                                      (value (hunchentoot:cookie-value (cdr x))))
+                                  (format nil "s:~d:\"~a\";s:~d:\"~a\";"
+                                          (length name)
+                                          name
+                                          (length value)
+                                          value)))
+                            cookies))
+         (seri-str  (format nil "a:~d:{~a}"
+                            (length cookies)
+                            (if (null cookies)
+                                ""
+                                (format nil "~{~a~}" serialize)))))
+    (base64:string-to-base64-string seri-str)))
+
+
 (defun get-sape-links (uri)
   (let ((rs "")
         (extproc (sb-ext:run-program "/usr/bin/php" '("-q" "links.php")
                                      :environment (append (sb-ext:posix-environ)
-                                                          (list (format nil "REQUEST_URI=~a" uri)))
+                                                          (list (format nil "REQUEST_URI=~a" uri))
+                                                          (list (format nil "COOKIE=~a" (base64-cookies))))
                                      :wait nil
                                      :input nil
                                      :output :stream)))
@@ -29,7 +49,8 @@
          (input-stream (make-string-input-stream content))
          (extproc (sb-ext:run-program "/usr/bin/php" '("-q" "context.php")
                                :environment (append (sb-ext:posix-environ)
-                                                    (list (format nil "REQUEST_URI=~a" uri)))
+                                                    (list (format nil "REQUEST_URI=~a" uri))
+                                                    (list (format nil "COOKIE=~a" (base64-cookies))))
                                :wait nil
                                :input input-stream
                                :output :stream)))
@@ -44,6 +65,8 @@
 
 
 (restas:define-route main ("/")
+  (hunchentoot:set-cookie "test-cookie" :value "test-value")
+  (hunchentoot:set-cookie "test-cookie2" :value "test-value2")
   (let* ((lines (iter (for line in-file (path "afor.txt") using #'read-line)
                      (collect line)))
          (line (nth (random (length lines))
