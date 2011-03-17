@@ -10,7 +10,20 @@ define('_SAPE_USER', 'ec412122841ba6bb52b8920985b75eda');
 require_once(_SAPE_USER.'/sape.php');
 /* $o['force_show_code'] = true; */
 $o['host'] = 'rigidus.ru';
+//$o['charset'] = 'cp1252';
 /* $o['debug'] = true; */
 $sape_context = new SAPE_context($o);
-echo($sape_context->replace_in_text_segment(file_get_contents('php://stdin')));
+
+$content = file_get_contents('php://stdin');
+
+//$fp = fopen('data.txt', 'w');
+//fwrite($fp, $content);
+//fclose($fp);
+
+echo(base64_encode(
+  //$sape_context->replace_in_text_segment(file_get_contents('php://stdin'))
+  //base64_decode(file_get_contents('php://stdin'))
+  //base64_decode(file_get_contents('php://stdin').' ') // space for empty(!)
+  $content
+));
 ?>

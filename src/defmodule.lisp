@@ -30,5 +30,6 @@
 
 (restas:start '#:rigidus :port 8080)
 ;; (restas:start '#:rigidus :port 4243)
-;; (restas:debug-mode-on)
+(restas:debug-mode-on)
+(restas:debug-mode-off)
 ;; (setf hunchentoot:*catch-errors-p* t)
