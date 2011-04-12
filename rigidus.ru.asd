@@ -9,5 +9,7 @@
   :depends-on (#:restas-directory-publisher #:restas-wiki #:closure-template)
   :components ((:module "src"
                         :components ((:file "defmodule")
-                                     (:file "render" :depends-on ("defmodule"))
-                                     (:file "routes" :depends-on ("render"))))))
+                                     (:file "sape"    :depends-on ("defmodule"))
+                                     (:file "orgmode" :depends-on ("defmodule"))
+                                     (:file "render"  :depends-on ("defmodule"))
+                                     (:file "routes"  :depends-on ("render"))))))
