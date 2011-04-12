@@ -65,8 +65,14 @@
 <ul>
   <li>
     <span style="color: red">⇒</span>
+      <a href="http://www.ibm.com/developerworks/ru/views/aix/libraryview.jsp?search_by=emacs">
+        Среда редактирования Emacs
+      </a>
+  </li>
+  <li>
+    <span style="color: red">⇒</span>
       <a href="http://www.developers.org.ua/lenta/articles/common-lisp-technologies/">
         Уникальные технологии Common Lisp (с примерами использования)
       </a>
   </li>
-
+</ul>

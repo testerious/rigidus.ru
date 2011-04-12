@@ -3,7 +3,10 @@
 ;;;; This file is part of the rigidus.ru web site, released under GNU Affero General Public License, Version 3.0
 ;;;; See file COPYING for details.
 ;;;;
-;;;; Author: Moskvitin Andrey <archimag@gmail.com>
+;;;; Authors:
+;;;;   Moskvitin Andrey <archimag@gmail.com>
+;;;;   Glukhov Michail <i.am.rigidus@gmail.com>
+
 
 (in-package #:rigidus)
 
