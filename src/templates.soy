@@ -26,9 +26,10 @@
 {/template}
 
 {template stat}
-    <div style="margin-top: -29px; margin-left: 150px;">{\n}
-        <!--Google Analitics -->{\n}
-        <script type="text/javascript">{\n}
+  {literal}
+    <div style="margin-top: -29px; margin-left: 150px;">
+        <!--Google Analitics -->
+        <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-20801780-1']);
             _gaq.push(['_trackPageview']);
@@ -36,34 +37,34 @@
             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();{\n}
-        </script>{\n}
+            })();
+        </script>
         <!--Google Analitics -->
 
-        <!--LiveInternet counter-->{\n}
-        <script type="text/javascript">{\n}
-            <!--{\n}
-                 document.write("<a href='http://www.liveinternet.ru/click' "+{\n}
-                 "target=_blank><img src='//counter.yadro.ru/hit?t24.5;r"+{\n}
-                 escape(document.referrer)+((typeof(screen)=="undefined")?"":{\n}
-                 ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?{\n}
-                 screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+{\n}
-                 ";h"+escape(document.title.substring(0,80))+";"+Math.random()+{\n}
-                 "' alt='' title='LiveInternet: показано число посетителей за"+{\n}
-                 " сегодня' "+{\n}
-                 "border='0' width='88' height='15'><\/a>"){\n}
-       //-->{\n}
-        </script>{\n}
-        <!--/LiveInternet-->{\n}
-        {\n}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <!-- Yandex.Metrika informer -->{\n}
-        <a href="http://metrika.yandex.ru/stat/?id=3701317&amp;from=informer"{\n}
-           target="_blank"><img src="//bs.yandex.ru/informer/3701317/1_0_9F9F9FFF_7F7F7FFF_0_pageviews"{\n}
-                                width="80" height="15" alt="Яндекс.Метрика" border="0" /></a>{\n}
-        <!-- /Yandex.Metrika informer -->{\n}
-        {\n}
-        <!-- Yandex.Metrika counter -->{\n}
-        <div style="display:none;"><script type="text/javascript">{\n}
+        <!--LiveInternet counter-->
+        <script type="text/javascript">
+            <!--
+                 document.write("<a href='http://www.liveinternet.ru/click' "+
+                 "target=_blank><img src='//counter.yadro.ru/hit?t24.5;r"+
+                 escape(document.referrer)+((typeof(screen)=="undefined")?"":
+                 ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+                 screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+                 ";h"+escape(document.title.substring(0,80))+";"+Math.random()+
+                 "' alt='' title='LiveInternet: показано число посетителей за"+
+                 " сегодня' "+
+                 "border='0' width='88' height='15'><\/a>")
+       //-->
+        </script>
+        <!--/LiveInternet-->
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <!-- Yandex.Metrika informer -->
+        <a href="http://metrika.yandex.ru/stat/?id=3701317&amp;from=informer"
+           target="_blank"><img src="//bs.yandex.ru/informer/3701317/1_0_9F9F9FFF_7F7F7FFF_0_pageviews"
+                                width="80" height="15" alt="Яндекс.Метрика" border="0" /></a>
+        <!-- /Yandex.Metrika informer -->
+
+        <!-- Yandex.Metrika counter -->
+        <div style="display:none;"><script type="text/javascript">
             (function(w, c) {
             (w[c] = w[c] || []).push(function() {
             try {
@@ -73,12 +74,13 @@
             } catch(e) {}
             });
             })(window, 'yandex_metrika_callbacks');
-        </script></div>{\n}
-        <script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript" defer="defer"></script>{\n}
-        <noscript><div style="position:absolute"><img src="//mc.yandex.ru/watch/3701317" alt="" /></div></noscript>{\n}
-        <!-- /Yandex.Metrika counter -->{\n}
-        {\n}
-    </div>{\n}
+        </script></div>
+        <script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript" defer="defer"></script>
+        <noscript><div style="position:absolute"><img src="//mc.yandex.ru/watch/3701317" alt="" /></div></noscript>
+        <!-- /Yandex.Metrika counter -->
+
+    </div>
+    {/literal}
 {/template}
 
 {template base}
