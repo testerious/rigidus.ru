@@ -11,8 +11,8 @@
 
 
 (restas:define-route main ("/")
-  (hunchentoot:set-cookie "test-cookie" :value "test-value")
-  (hunchentoot:set-cookie "test-cookie2" :value "test-value2")
+  ;; (hunchentoot:set-cookie "test-cookie" :value "test-value")
+  ;; (hunchentoot:set-cookie "test-cookie2" :value "test-value2")
   (let* ((lines (iter (for line in-file (path "afor.txt") using #'read-line)
                      (collect line)))
          (line (nth (random (length lines))
@@ -54,7 +54,8 @@
 
 
 (restas:define-route article ("articles/:article")
-  (path (format nil "content/articles/~A.org" article)))
+  (gethash article *articles*))
+  ;; (path (format nil "content/articles/~A.org" article)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; submodules
@@ -73,12 +74,14 @@
   (restas.directory-publisher:*default-render-method* *default-render-method*)
   (restas.directory-publisher:*directory-index-files* '("resources.org")))
 
-;; (restas:mount-submodule -wiki- (#:restas.wiki)
-;;   (restas.wiki:*baseurl* '("wiki"))
-;;   (restas.wiki:*storage* (make-instance 'restas.wiki:file-storage
-;;                                         :dir #P"/var/rigidus.ru/wiki/"))
-;;   (restas.wiki:*default-render-method* (make-instance 'rigidus-wiki-render))
-;;   (restas.wiki:*wiki-user-function* #'(lambda () "anonymous")))
+(restas:mount-submodule -wiki- (#:restas.wiki)
+  (restas.wiki:*baseurl* '("wiki"))
+  (restas.wiki:*storage* (make-instance 'restas.wiki:file-storage
+                                        :dir (path "wiki/")))
+  (restas.wiki:*default-render-method* (make-instance 'rigidus-wiki-render))
+  (restas.wiki:*wiki-user-function* #'(lambda () "anonymous")))
+
+
 
 ;; (setf restas:*default-host-redirect* *host*)
 

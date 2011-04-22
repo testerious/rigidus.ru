@@ -34,6 +34,25 @@
 
 (closure-template:compile-template :common-lisp-backend (path "src/templates.soy"))
 
+(load (path "src/orgmode.lisp"))
+(load (path "src/sape.lisp"))
+(load (path "src/render.lisp"))
+(load (path "src/routes.lisp"))
+
+(defparameter *articles* (make-hash-table :test #'equal))
+
+(loop
+   :for file
+   :in  (directory (path "content/articles/*.*"))
+   :do
+   (setf (gethash (pathname-name file) *articles*)
+         (parse-org file)))
+
+;; (maphash #'(lambda (k v)
+;;              (print (list k v)))
+;;          *articles*)
+
+
 (restas:start '#:rigidus :port 8000)
 (restas:debug-mode-on)
 (restas:debug-mode-off)
